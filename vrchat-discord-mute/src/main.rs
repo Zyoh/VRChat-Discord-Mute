@@ -18,37 +18,33 @@ fn main() {
 
     let mut buf = [0u8; rosc::decoder::MTU];
 
+    if let Err(e) = mainloop(&sock, &mut buf) {
+        println!("Error: {}", e);
+    }
+}
+
+fn mainloop(sock : &UdpSocket, buf : &mut [u8]) -> Result<(), std::io::Error> {
     loop {
-        match sock.recv_from(&mut buf) {
-            Ok((size, _)) => {
-                let (_, packet) = rosc::decoder::decode_udp(&buf[..size]).unwrap();
-                handle_packet(packet);
-            }
-            Err(e) => {
-                println!("Error receiving from socket: {}", e);
-                break;
-            }
+        let (size, _) = sock.recv_from(buf)?;
+        let (_, packet) = rosc::decoder::decode_udp(&buf[..size]).unwrap();
+        if let OscPacket::Message(msg) = packet {
+            handle_message(msg);
         }
     }
 }
 
-fn handle_packet(packet: OscPacket) {
-    match packet {
-        OscPacket::Message(msg) => {
-            if msg.addr == "/avatar/parameters/GestureLeft" {
-                if let Int(value) = msg.args.iter().next().unwrap() {
-                    println!("GestureLeft: {}", value);
-                    if *value == 5 {
-                        println!("Toggling mute...");
-                        match discord_toggle_mute() {
-                            Ok(_) => println!("Toggled mute"),
-                            Err(e) => println!("Error toggling mute: {}", e),
-                        }
-                    }
+fn handle_message(msg: rosc::OscMessage) {
+    if msg.addr == "/avatar/parameters/GestureLeft" {
+        if let Int(value) = msg.args[0] {
+            println!("GestureLeft: {}", value);
+            if value == 5 {
+                println!("Toggling mute...");
+                match discord_toggle_mute() {
+                    Ok(_) => println!("Toggled mute"),
+                    Err(e) => println!("Error toggling mute: {}", e),
                 }
             }
         }
-        _ => {}
     }
 }
 

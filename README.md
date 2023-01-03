@@ -1,0 +1,2 @@
+# VRChat-Discord-Mute
+ 

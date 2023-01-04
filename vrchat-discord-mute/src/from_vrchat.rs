@@ -7,10 +7,12 @@ use std::str::FromStr;
 
 use crate::timestamp::iso8601;
 
+// TODO: Make this configurable
 const VRCHAT_GESTURE_LEFT_ADDR: &str = "/avatar/parameters/GestureLeft";
+const VRCHAT_SENDS_TO_ADDR: &str = "127.0.0.1:9001";
 
 pub fn mainloop() -> Result<(), Box<dyn std::error::Error>> {
-    let addr = SocketAddrV4::from_str("127.0.0.1:9001")?;
+    let addr = SocketAddrV4::from_str(VRCHAT_SENDS_TO_ADDR)?;
     let sock = UdpSocket::bind(addr).unwrap();
     println!("Listening to {}", addr);
 

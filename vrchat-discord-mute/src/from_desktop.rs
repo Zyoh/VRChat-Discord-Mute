@@ -6,7 +6,10 @@ use rosc::{encoder, OscMessage, OscPacket, OscType};
 
 use crate::timestamp::iso8601;
 
+// TODO: Make this configurable
 const VRCHAT_VOICE_ADDR: &str = "/input/Voice";
+const VRCHAT_LISTENS_TO_ADDR: &str = "127.0.0.1:9000";
+const APPLICATION_BINDS_TO_ADDR: &str = "127.0.0.1:49000";
 
 pub fn mainloop() -> Result<(), std::io::Error> {
     if let Err(e) = listen(callback) {
@@ -43,14 +46,14 @@ fn vrchat_toggle_mute() -> Result<(), Box<dyn Error>> {
 }
 
 fn send_voice_value(value: i32) -> Result<(), Box<dyn std::error::Error>> {
-    let sock = UdpSocket::bind("127.0.0.1:49000")?;
+    let sock = UdpSocket::bind(APPLICATION_BINDS_TO_ADDR)?;
 
     let msg_buf = encoder::encode(&OscPacket::Message(OscMessage {
         addr: VRCHAT_VOICE_ADDR.to_string(),
         args: vec![OscType::Int(value)],
     }))?;
 
-    sock.send_to(&msg_buf, "127.0.0.1:9000")?;
+    sock.send_to(&msg_buf, VRCHAT_LISTENS_TO_ADDR)?;
 
     Ok(())
 }

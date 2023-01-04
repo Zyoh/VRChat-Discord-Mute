@@ -7,17 +7,20 @@ extern crate rosc;
 use std::thread;
 
 fn main() {
-    thread::spawn(|| {
+    // TODO: Let user choose which to run
+
+    let thread_desktop = thread::spawn(|| {
         if let Err(e) = from_desktop::mainloop() {
             println!("Error: {}", e);
         }
     });
 
-    let t2 = thread::spawn(|| {
+    let thread_vrchat = thread::spawn(|| {
         if let Err(e) = from_vrchat::mainloop() {
             println!("Error: {}", e);
         }
     });
 
-    t2.join().unwrap();
+    thread_desktop.join().unwrap();
+    thread_vrchat.join().unwrap();
 }

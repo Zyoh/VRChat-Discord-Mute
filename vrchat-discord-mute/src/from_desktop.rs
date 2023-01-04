@@ -6,10 +6,11 @@ use rosc::{encoder, OscMessage, OscPacket, OscType};
 
 use crate::timestamp::iso8601;
 
-// TODO: Make this configurable
+// TODO: Make these configurable
 const VRCHAT_VOICE_ADDR: &str = "/input/Voice";
 const VRCHAT_LISTENS_TO_ADDR: &str = "127.0.0.1:9000";
-const APPLICATION_BINDS_TO_ADDR: &str = "127.0.0.1:49000";
+const APPLICATION_BINDS_TO_ADDR: &str = "127.0.0.1:49000"; // This can be any free port, doesn't matter.
+const VRCHAT_MUTE_HOTKEY: Key = Key::AltGr; // This will toggle mute in VRChat.
 
 pub fn mainloop() -> Result<(), std::io::Error> {
     if let Err(e) = listen(callback) {
@@ -21,7 +22,7 @@ pub fn mainloop() -> Result<(), std::io::Error> {
 
 fn callback(event: Event) {
     match event.event_type {
-        KeyPress(Key::AltGr) => {
+        KeyPress(VRCHAT_MUTE_HOTKEY) => {
             match vrchat_toggle_mute() {
                 Ok(_) => {
                     // TODO: Use a better logging system

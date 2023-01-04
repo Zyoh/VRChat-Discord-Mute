@@ -7,9 +7,11 @@ use std::str::FromStr;
 
 use crate::timestamp::iso8601;
 
-// TODO: Make this configurable
-const VRCHAT_GESTURE_LEFT_ADDR: &str = "/avatar/parameters/GestureLeft";
+// TODO: Make these configurable
+const DISCORD_MUTE_HOTKEY: Key = Key::Pause; // Set this in Discord as your mute toggle.
 const VRCHAT_SENDS_TO_ADDR: &str = "127.0.0.1:9001";
+const VRCHAT_GESTURE_LEFT_ADDR: &str = "/avatar/parameters/GestureLeft";
+const VRCHAT_TRIGGER_GESTURE: i32 = 5; // This value corresponds to the gesture that triggers mute.
 
 pub fn mainloop() -> Result<(), Box<dyn std::error::Error>> {
     let addr = SocketAddrV4::from_str(VRCHAT_SENDS_TO_ADDR)?;
@@ -30,7 +32,7 @@ pub fn mainloop() -> Result<(), Box<dyn std::error::Error>> {
 fn handle_message(msg: rosc::OscMessage) {
     if msg.addr == VRCHAT_GESTURE_LEFT_ADDR {
         if let Int(value) = msg.args[0] {
-            if value == 5 {
+            if value == VRCHAT_TRIGGER_GESTURE {
                 match discord_toggle_mute() {
                     Ok(_) => {
                         // TODO: Use a better logging system
@@ -46,8 +48,8 @@ fn handle_message(msg: rosc::OscMessage) {
 }
 
 fn discord_toggle_mute() -> Result<(), rdev::SimulateError> {
-    simulate(&EventType::KeyPress(Key::Pause))?;
+    simulate(&EventType::KeyPress(DISCORD_MUTE_HOTKEY))?;
     thread::sleep(time::Duration::from_millis(100));
-    simulate(&EventType::KeyRelease(Key::Pause))?;
+    simulate(&EventType::KeyRelease(DISCORD_MUTE_HOTKEY))?;
     Ok(())
 }

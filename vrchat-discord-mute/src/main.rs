@@ -12,7 +12,7 @@ use std::path::{PathBuf};
 use std::thread;
 use config::Config;
 
-const CONFIG_NAME: &str = "config.json";
+const CONFIG_NAME: &str = "vdm-config.json";
 
 lazy_static! {
     static ref CONFIG: Config = match load_config() {

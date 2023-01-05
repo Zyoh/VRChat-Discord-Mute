@@ -1,4 +1,4 @@
-struct Logger;
+pub struct Logger;
 
 impl log::Log for Logger {
     fn enabled(&self, metadata: &log::Metadata) -> bool {
@@ -14,9 +14,4 @@ impl log::Log for Logger {
     }
 
     fn flush(&self) {}
-}
-
-pub fn init() {
-    log::set_logger(&Logger).unwrap();
-    log::set_max_level(log::LevelFilter::Info);
 }

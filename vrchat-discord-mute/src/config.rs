@@ -4,18 +4,18 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Config {
-    vrchat_sends_to_addr: String,
-    vrchat_listens_to_addr: String,
+    pub vrchat_sends_to_addr: String,
+    pub vrchat_listens_to_addr: String,
 
-    modules_to_run: u8, // 0 -> All, 1 -> thread_desktop, 2 -> thread_vrchat
-    application_binds_to_addr: String, // Any free port will work. Ex: "127.0.0.1:43249
+    pub modules_to_run: u8, // 0 -> All, 1 -> thread_desktop, 2 -> thread_vrchat
+    pub application_binds_to_addr: String, // Any free port will work. Ex: "127.0.0.1:43249
 
-    discord_mute_hotkey: u32, // https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
-    vrchat_gesture_left_addr: String, // https://docs.vrchat.com/docs/animator-parameters#parameters
-    vrchat_trigger_gesture: i32, // https://docs.vrchat.com/docs/animator-parameters#gestureleft-and-gestureright-values
+    pub discord_mute_hotkey: u32, // https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+    pub vrchat_gesture_left_addr: String, // https://docs.vrchat.com/docs/animator-parameters#parameters
+    pub vrchat_trigger_gesture: i32, // https://docs.vrchat.com/docs/animator-parameters#gestureleft-and-gestureright-values
 
-    vrchat_mute_hotkey: u32, // https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
-    vrchat_voice_addr: String, // https://docs.vrchat.com/docs/animator-parameters#parameters
+    pub vrchat_mute_hotkey: String, // https://docs.rs/rdev/latest/rdev/enum.Key.html
+    pub vrchat_voice_addr: String, // https://docs.vrchat.com/docs/animator-parameters#parameters
 }
 
 impl Config {
@@ -49,7 +49,7 @@ impl Config {
             vrchat_gesture_left_addr: "/avatar/parameters/GestureLeft".to_string(),
             vrchat_trigger_gesture: 5,
 
-            vrchat_mute_hotkey: 0xA5,
+            vrchat_mute_hotkey: "altgr".to_string(),
             vrchat_voice_addr: "/input/Voice".to_string(),
         }
     }

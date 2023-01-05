@@ -1,6 +1,6 @@
 mod from_vrchat;
 mod from_desktop;
-mod timestamp;
+mod logging;
 
 extern crate rosc;
 
@@ -8,16 +8,17 @@ use std::thread;
 
 fn main() {
     // TODO: Let user choose which to run
+    logging::init();
 
     let thread_desktop = thread::spawn(|| {
         if let Err(e) = from_desktop::mainloop() {
-            println!("Error: {}", e);
+            log::error!("Error: {:?}", e);
         }
     });
 
     let thread_vrchat = thread::spawn(|| {
         if let Err(e) = from_vrchat::mainloop() {
-            println!("Error: {}", e);
+            log::error!("Error: {}", e);
         }
     });
 

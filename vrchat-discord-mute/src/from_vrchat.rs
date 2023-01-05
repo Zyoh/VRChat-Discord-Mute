@@ -5,8 +5,6 @@ use rdev::{simulate, EventType, Key};
 use std::{thread, time};
 use std::str::FromStr;
 
-use crate::timestamp::iso8601;
-
 // TODO: Make these configurable
 const DISCORD_MUTE_HOTKEY: Key = Key::Pause; // Set this in Discord as your mute toggle.
 const VRCHAT_SENDS_TO_ADDR: &str = "127.0.0.1:9001";
@@ -16,7 +14,7 @@ const VRCHAT_TRIGGER_GESTURE: i32 = 5; // This value corresponds to the gesture 
 pub fn mainloop() -> Result<(), Box<dyn std::error::Error>> {
     let addr = SocketAddrV4::from_str(VRCHAT_SENDS_TO_ADDR)?;
     let sock = UdpSocket::bind(addr).unwrap();
-    println!("Listening to {}", addr);
+    log::info!("Listening to {}", addr);
 
     let mut buf = [0u8; rosc::decoder::MTU];
 
@@ -34,13 +32,8 @@ fn handle_message(msg: rosc::OscMessage) {
         if let Int(value) = msg.args[0] {
             if value == VRCHAT_TRIGGER_GESTURE {
                 match discord_toggle_mute() {
-                    Ok(_) => {
-                        // TODO: Use a better logging system
-                        let mut log = iso8601();
-                        log.push_str(" | Toggled Discord mute");
-                        println!("{}", log);
-                    },
-                    Err(e) => println!("Error toggling mute: {}", e),
+                    Ok(_) => log::info!("Toggled Discord mute."),
+                    Err(e) => log::warn!("Error toggling mute: {}", e),
                 }
             }
         }

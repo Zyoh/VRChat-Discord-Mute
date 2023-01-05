@@ -1,0 +1,11 @@
+{
+  "vrchat_sends_to_addr": "127.0.0.1:9001",
+  "vrchat_listens_to_addr": "127.0.0.1:9000",
+  "modules_to_run": 0,
+  "application_binds_to_addr": "127.0.0.1:49590",
+  "discord_mute_hotkey": 163,
+  "vrchat_gesture_left_addr": "/avatar/parameters/GestureLeft",
+  "vrchat_trigger_gesture": 5,
+  "vrchat_mute_hotkey": 165,
+  "vrchat_voice_addr": "/input/Voice"
+}

@@ -10,3 +10,6 @@ rosc = "0.9.1"
 rdev = "0.5.2"
 chrono = "0.4.23"
 log = "0.4.17"
+serde = { version = "1.0.152", features = ["derive"] }
+serde_json = "1.0.91"
+lazy_static = "1.4.0"

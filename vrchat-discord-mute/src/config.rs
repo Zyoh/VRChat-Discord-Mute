@@ -7,7 +7,7 @@ pub struct Config {
     pub vrchat_sends_to_addr: String,
     pub vrchat_listens_to_addr: String,
 
-    pub modules_to_run: u8, // 0 -> All, 1 -> thread_desktop, 2 -> thread_vrchat
+    pub modules_to_run: ModuleRunOption, // 0 -> All, 1 -> thread_desktop, 2 -> thread_vrchat
     pub application_binds_to_addr: String, // Any free port will work. Ex: "127.0.0.1:43249
 
     pub discord_mute_hotkey: u32, // https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
@@ -42,7 +42,7 @@ impl Config {
             vrchat_sends_to_addr: "127.0.0.1:9001".to_string(),
             vrchat_listens_to_addr: "127.0.0.1:9000".to_string(),
 
-            modules_to_run: 0,
+            modules_to_run: ModuleRunOption::All,
             application_binds_to_addr: "127.0.0.1:49590".to_string(),
 
             discord_mute_hotkey: 0xA3,
@@ -60,3 +60,13 @@ impl Default for Config {
         Self::new()
     }
 }
+
+#[derive(serde_repr::Serialize_repr, serde_repr::Deserialize_repr, PartialEq, Debug)]
+#[repr(u8)]
+pub enum ModuleRunOption {
+    All = 0,
+    Desktop = 1,
+    VRChat = 2,
+}
+
+

@@ -6,6 +6,6 @@
   "discord_mute_hotkey": 163,
   "vrchat_gesture_left_addr": "/avatar/parameters/GestureLeft",
   "vrchat_trigger_gesture": 5,
-  "vrchat_mute_hotkey": 165,
+  "vrchat_mute_hotkey": "altgr",
   "vrchat_voice_addr": "/input/Voice"
 }

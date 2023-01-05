@@ -4,11 +4,7 @@ use rdev::{Event, listen, ListenError};
 use rdev::EventType::KeyPress;
 use rosc::{encoder, OscMessage, OscPacket, OscType};
 
-// TODO: Make these configurable
-const VRCHAT_VOICE_ADDR: &str = "/input/Voice";
-const VRCHAT_LISTENS_TO_ADDR: &str = "127.0.0.1:9000";
-const APPLICATION_BINDS_TO_ADDR: &str = "127.0.0.1:49000"; // This can be any free port, doesn't matter.
-const VRCHAT_MUTE_HOTKEY: &str = "altgr"; // This will toggle mute in VRChat.
+use super::CONFIG;
 
 pub fn mainloop() -> Result<(), ListenError> {
     listen(callback)?;
@@ -17,7 +13,8 @@ pub fn mainloop() -> Result<(), ListenError> {
 
 fn callback(event: Event) {
     if let KeyPress(key) = event.event_type {
-        if format!("{:?}", key).to_ascii_lowercase() == VRCHAT_MUTE_HOTKEY {
+        log::debug!("Detected keypress: {:?}", key);
+        if format!("{:?}", key).to_ascii_lowercase() == CONFIG.vrchat_mute_hotkey {
             match vrchat_toggle_mute() {
                 Ok(_) => log::info!("Toggled VRChat mute."),
                 Err(e) => log::warn!("Error toggling mute: {}", e),
@@ -36,14 +33,14 @@ fn vrchat_toggle_mute() -> Result<(), Box<dyn Error>> {
 }
 
 fn send_voice_value(value: i32) -> Result<(), Box<dyn Error>> {
-    let sock = UdpSocket::bind(APPLICATION_BINDS_TO_ADDR)?;
+    let sock = UdpSocket::bind(&CONFIG.application_binds_to_addr)?;
 
     let msg_buf = encoder::encode(&OscPacket::Message(OscMessage {
-        addr: VRCHAT_VOICE_ADDR.to_string(),
+        addr: CONFIG.vrchat_voice_addr.to_string(),
         args: vec![OscType::Int(value)],
     }))?;
 
-    sock.send_to(&msg_buf, VRCHAT_LISTENS_TO_ADDR)?;
+    sock.send_to(&msg_buf, &CONFIG.vrchat_listens_to_addr)?;
 
     Ok(())
 }

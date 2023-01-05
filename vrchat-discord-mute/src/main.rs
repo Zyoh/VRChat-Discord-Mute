@@ -13,6 +13,7 @@ use std::thread;
 use config::Config;
 
 const CONFIG_NAME: &str = "config.json";
+
 lazy_static! {
     static ref CONFIG: Config = match load_config() {
         Ok(config) => config,
@@ -24,7 +25,8 @@ lazy_static! {
 }
 
 fn main() {
-    logging::init();
+    log::set_logger(&logging::Logger).unwrap();
+    log::set_max_level(log::LevelFilter::Info);
 
     match save_config(&CONFIG) {
         Ok(_) => {

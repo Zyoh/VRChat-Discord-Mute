@@ -17,6 +17,8 @@ Requires Cargo and Rust.
 2. `cd` into root/vrchat-discord-mute
 3. Run `cargo build --release` or just `cargo run`
 
-## Issues
+# Configuration
 
-There's currently no configuration file, so you'll have to edit the source code to change the hotkeys.
+The config file is created in the same directory as the executable.
+
+See [config.rs](./vrchat-discord-mute/src/config.rs) for descriptions.

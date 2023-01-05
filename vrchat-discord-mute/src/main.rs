@@ -37,21 +37,30 @@ fn main() {
         }
     }
 
-    // TODO: Let user choose which to run
-    let thread_desktop = thread::spawn(|| {
-        if let Err(e) = from_desktop::mainloop() {
-            log::error!("Error: {:?}", e);
-        }
-    });
+    if CONFIG.modules_to_run == config::ModuleRunOption::All
+        || CONFIG.modules_to_run == config::ModuleRunOption::Desktop {
 
-    let thread_vrchat = thread::spawn(|| {
-        if let Err(e) = from_vrchat::mainloop() {
-            log::error!("Error: {}", e);
-        }
-    });
+        thread::spawn(|| {
+            log::info!("Starting desktop thread...");
+            if let Err(e) = from_desktop::mainloop() {
+                log::error!("Error: {:?}", e);
+            }
+        });
+    }
+    if CONFIG.modules_to_run == config::ModuleRunOption::All
+        || CONFIG.modules_to_run == config::ModuleRunOption::VRChat {
 
-    thread_desktop.join().unwrap();
-    thread_vrchat.join().unwrap();
+        thread::spawn(|| {
+            log::info!("Starting VRChat thread...");
+            if let Err(e) = from_vrchat::mainloop() {
+                log::error!("Error: {}", e);
+            }
+        });
+    }
+
+    loop {
+        thread::sleep(std::time::Duration::from_secs(1));
+    }
 }
 
 fn save_config(config: &Config) -> Result<(), Box<dyn Error>> {

@@ -14,7 +14,7 @@ pub fn mainloop() -> Result<(), ListenError> {
 fn callback(event: Event) {
     if let KeyPress(key) = event.event_type {
         log::debug!("Detected keypress: {:?}", key);
-        if format!("{:?}", key).to_ascii_lowercase() == CONFIG.vrchat_mute_hotkey {
+        if format!("{:?}", key).to_ascii_lowercase() == CONFIG.vrchat_mute_hotkey.to_ascii_lowercase() {
             match vrchat_toggle_mute() {
                 Ok(_) => log::info!("Toggled VRChat mute."),
                 Err(e) => log::warn!("Error toggling mute: {}", e),

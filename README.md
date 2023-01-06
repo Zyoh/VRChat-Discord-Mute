@@ -22,3 +22,9 @@ Requires Cargo and Rust.
 The config file is created in the same directory as the executable.
 
 See [config.rs](./vrchat-discord-mute/src/config.rs) for descriptions.
+
+## Defaults
+
+- Discord mute hotkey: `PAUSE`
+- VRChat mute hotkey: `AltGr`
+- VRChat Gesture: `GestureLeft: RockNRoll`

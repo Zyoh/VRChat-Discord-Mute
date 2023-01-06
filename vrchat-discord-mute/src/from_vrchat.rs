@@ -37,8 +37,11 @@ fn handle_message(msg: rosc::OscMessage) {
 }
 
 fn discord_toggle_mute() -> Result<(), rdev::SimulateError> {
-    simulate(&EventType::KeyPress(Key::Unknown(CONFIG.discord_mute_hotkey)))?;
+    let discord_key = Key::Unknown(CONFIG.discord_mute_hotkey);
+
+    simulate(&EventType::KeyPress(discord_key))?;
     thread::sleep(time::Duration::from_millis(100));
-    simulate(&EventType::KeyRelease(Key::Unknown(CONFIG.discord_mute_hotkey)))?;
+    simulate(&EventType::KeyRelease(discord_key))?;
+
     Ok(())
 }

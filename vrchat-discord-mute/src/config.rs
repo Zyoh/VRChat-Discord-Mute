@@ -45,7 +45,7 @@ impl Config {
             modules_to_run: ModuleRunOption::All,
             application_binds_to_addr: "127.0.0.1:49590".to_string(),
 
-            discord_mute_hotkey: 0xA3,
+            discord_mute_hotkey: 0x13,
             vrchat_gesture_left_addr: "/avatar/parameters/GestureLeft".to_string(),
             vrchat_trigger_gesture: 5,
 
